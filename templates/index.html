@@ -4,11 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Machine Learning</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #0d2818;
+        margin: 0;
+        padding: 40px;
+        text-align: center;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+        color: #D4A574;
+    }
+    .intro p {
+        font-size: 16px;
+        color: #d0d0d0;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    h2 {
+        margin-top: 50px;
+        font-size: 26px;
+        color: #8FBFA3;
+    }
+    .cards {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .card {
+        border-radius: 10px;
+        padding: 20px;
+        width: 220px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .card h3 {
+        font-size: 22px;
+        margin-top: 0;
+    }
+    .card p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .card-1 { background-color: #8FBFA3; color: #0d2818; }
+    .card-2 { background-color: #D4A574; color: #0d2818; }
+    .card-3 { background-color: #6B8E5A; color: white; }
+    .card-4 { background-color: #2D9B6F; color: white; }
+    </style>
+
 </head>
 <body>
-    <h1>Machine Learning</h1>
-    <p>Machine learning is a type of artificial intelligence that can analyze data without being given specific instructions for every task. It can use a lot of old data to find patterns and make predictions about new data. It can be used to classify and predict information in documents, images, numbers, and other types of data.
-    For example, a financial company can train a machine learning system to identify fraudulent and real transactions. The system learns from previous transactions and finds patterns. Then, it can predict if a new transaction is real or fraudulent.
-</p>
+     <h1>Machine Learning</h1>
+    <div class="intro">
+        <p>Machine learning is a type of artificial intelligence that can analyze data without being given specific instructions for every task. It can use a lot of old data to find patterns and make predictions about new data. It can be used to classify and predict information in documents, images, numbers, and other types of data.</p>
+
+        <p>For example, a financial company can train a machine learning system to identify fraudulent and real transactions. The system learns from previous transactions and finds patterns. Then, it can predict if a new transaction is real or fraudulent.</p>
+    </div>
+
+    <h2>Types of Machine Learning</h2>
+    <div class="cards">
+        <div class="card card-1">
+            <h3>01</h3>
+            <h3>Supervised Learning</h3>
+            <p>The model is trained on labeled data, learning to map inputs to known outputs. Common tasks include classification and regression.</p>
+        </div>
+        <div class="card card-2">
+            <h3>02</h3>
+            <h3>Unsupervised Learning</h3>
+            <p>The model works with unlabeled data, identifying patterns and structures on its own. Common tasks include clustering and dimensionality reduction.</p>
+        </div>
+        <div class="card card-3">
+            <h3>03</h3>
+            <h3>Semi-Supervised Learning</h3>
+            <p>The model is trained on a combination of a small amount of labeled data and a large amount of unlabeled data.</p>
+        </div>
+        <div class="card card-4">
+            <h3>04</h3>
+            <h3>Reinforcement Learning</h3>
+            <p>The model learns by interacting with an environment, receiving rewards or penalties based on its actions, in order to maximize cumulative reward.</p>
+        </div>
+    </div>
 </body>
 </html>
