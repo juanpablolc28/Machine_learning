@@ -94,14 +94,14 @@
             <input type="number" name="km" step="0.1" required>
             <button type="submit" name="tipo" value="gasolina">Predict Gasoline</button>
         </form>
-
-        {% if litros is not none %}
-            <div class="result">
-                <h2>Liters needed: {{ litros }}</h2>
-                <h2>Estimated cost: {{ costo }}</h2>
-                <img src="data:image/png;base64,{{ grafica_gas }}" alt="Gasoline chart">
-            </div>
-        {% endif %}
+    {% if liters is not none %}
+        <div class="result">
+            <h2>Liters needed: {{ liters }}</h2>
+            <h2>Estimated cost: {{ cost }}</h2>
+            <h2>Estimated CO2 emissions: {{ co2 }} kg</h2>
+            <img src="data:image/png;base64,{{ gas_chart }}" alt="Gasoline chart">
+        </div>
+    {% endif %}
     </div>
 
 </body>

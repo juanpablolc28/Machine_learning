@@ -11,9 +11,10 @@ def template():
 def calculate():
     result = None
     grafica_notas = None
-    litros = None
-    costo = None
-    grafica_gas = None
+    liters = None
+    cost = None
+    co2 = None
+    gas_chart = None
 
     if request.method == "POST":
         tipo = request.form.get("tipo")
@@ -25,16 +26,17 @@ def calculate():
 
         elif tipo == "gasolina":
             km = float(request.form["km"])
-            litros, costo = LinearRegression.calculateGasoline(km)
-            grafica_gas = LinearRegression.generarGraficaGasolina(km)
+            liters, cost, co2 = LinearRegression.calculateGasoline(km)
+            gas_chart = LinearRegression.generateGasolineChart(km)
 
     return render_template(
         "tempLinearRegression.html",
         result=result,
         grafica_notas=grafica_notas,
-        litros=litros,
-        costo=costo,
-        grafica_gas=grafica_gas
+        liters=liters,
+        cost=cost,
+        co2=co2,
+        gas_chart=gas_chart
     )
 
 if __name__ == '__main__':
