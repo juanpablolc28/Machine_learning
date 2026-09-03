@@ -7,6 +7,13 @@
     <title>{% block title %}Machine Learning{% endblock %}</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #0d2818; margin: 0; padding: 40px; color: #f4f4f4; box-sizing: border-box; }
+        .dropdown-item:hover, .dropdown-item:focus {
+            background-color: #2D9B6F;
+            color: white;
+        }
+        .dropdown-menu {
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -24,12 +31,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" style="background-color:#1a3d2a;">
                             <li><a class="dropdown-item text-light" href="/concepts">Concepts</a></li>
                             <li><a class="dropdown-item text-light" href="/types">Types of Machine Learning</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><h6 class="dropdown-header text-light">Use Cases</h6></li>
-                            <li><a class="dropdown-item text-light" href="/use-case-1">Use Case 1</a></li>
-                            <li><a class="dropdown-item text-light" href="/use-case-2">Use Case 2</a></li>
-                            <li><a class="dropdown-item text-light" href="/use-case-3">Use Case 3</a></li>
-                            <li><a class="dropdown-item text-light" href="/use-case-4">Use Case 4</a></li>
+                            <li><a class="dropdown-item text-light" href="/use-cases">Use Cases</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
