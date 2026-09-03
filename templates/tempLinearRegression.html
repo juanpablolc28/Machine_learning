@@ -1,99 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linear Regression</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0d2818;
-            color: #f4f4f4;
-            margin: 0;
-            padding: 40px;
-        }
-        h1 {
-            font-size: 30px;
-            color: #e0a872;
-            text-align: center;
-        }
-        h2 {
-            color: #7fb08f;
-            text-align: center;
-        }
-        .section {
-            max-width: 700px;
-            margin: 0 auto 60px auto;
-            background-color: #163321;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        label {
-            font-size: 16px;
-        }
-        input {
-            padding: 8px;
-            border-radius: 6px;
-            border: none;
-            width: 200px;
-            text-align: center;
-        }
-        button {
-            padding: 10px 25px;
-            border-radius: 8px;
-            border: none;
-            background-color: #2f9e6f;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #257d58;
-        }
-        .result {
-            text-align: center;
-            margin-top: 20px;
-        }
-        img {
-            display: block;
-            margin: 20px auto 0 auto;
-            border-radius: 10px;
-            max-width: 100%;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Linear Regression{% endblock %}
+{% block content %}
+<style>
+    h1 { font-size: 30px; color: #e0a872; text-align: center; }
+    h2 { color: #7fb08f; text-align: center; }
+    .section { max-width: 700px; margin: 0 auto 60px auto; background-color: #163321; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    form { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+    label { font-size: 16px; }
+    input { padding: 8px; border-radius: 6px; border: none; width: 200px; text-align: center; }
+    button { padding: 10px 25px; border-radius: 8px; border: none; background-color: #2f9e6f; color: white; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: #257d58; }
+    .result { text-align: center; margin-top: 20px; }
+    img { display: block; margin: 20px auto 0 auto; border-radius: 10px; max-width: 100%; }
+</style>
 
-    <div class="section">
-        <h1>Predict Grade by Study Hours</h1>
-        <form method="post">
-            <label for="hours">Study Hours</label>
-            <input type="number" name="hours" step="0.1" required>
-            <button type="submit" name="tipo" value="notas">Predict Grade</button>
-        </form>
+<div class="section">
+    <h1>Predict Grade by Study Hours</h1>
+    <form method="post">
+        <label for="hours">Study Hours</label>
+        <input type="number" name="hours" step="0.1" required>
+        <button type="submit" name="tipo" value="notas">Predict Grade</button>
+    </form>
 
-        {% if result is not none %}
-            <div class="result">
-                <h2>Estimated Grade: {{ result }}</h2>
-                <img src="data:image/png;base64,{{ grafica_notas }}" alt="Grade chart">
-            </div>
-        {% endif %}
-    </div>
+    {% if result is not none %}
+        <div class="result">
+            <h2>Estimated Grade: {{ result }}</h2>
+            <img src="data:image/png;base64,{{ grafica_notas }}" alt="Grade chart">
+        </div>
+    {% endif %}
+</div>
 
-    <div class="section">
-        <h1>Predict Gasoline by Kilometers</h1>
-        <form method="post">
-            <label for="km">Kilometers</label>
-            <input type="number" name="km" step="0.1" required>
-            <button type="submit" name="tipo" value="gasolina">Predict Gasoline</button>
-        </form>
+<div class="section">
+    <h1>Predict Gasoline by Kilometers</h1>
+    <form method="post">
+        <label for="km">Kilometers</label>
+        <input type="number" name="km" step="0.1" required>
+        <button type="submit" name="tipo" value="gasolina">Predict Gasoline</button>
+    </form>
     {% if liters is not none %}
         <div class="result">
             <h2>Liters needed: {{ liters }}</h2>
@@ -102,7 +45,5 @@
             <img src="data:image/png;base64,{{ gas_chart }}" alt="Gasoline chart">
         </div>
     {% endif %}
-    </div>
-
-</body>
-</html>
+</div>
+{% endblock %}

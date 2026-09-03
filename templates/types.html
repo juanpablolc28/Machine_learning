@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Types of Machine Learning{% endblock %}
+{% block content %}
+<div style="text-align:center;">
+    <h1 style="color:#D4A574;">Types of Machine Learning</h1>
+    <div class="intro" style="max-width:800px; margin:0 auto; text-align:left;">
+        <p>
+            <!-- Escribe aquí la explicación de los tipos de Machine Learning -->
+        </p>
+    </div>
+
+    <!-- Ejemplo de tarjetas, reutiliza el estilo .card de index.html si quieres -->
+    <div class="cards" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:30px;">
+        <div class="card" style="background-color:#8FBFA3; color:#0d2818; border-radius:10px; padding:20px; width:220px;">
+            <h3>Supervised Learning</h3>
+            <p><!-- descripción --></p>
+        </div>
+        <div class="card" style="background-color:#D4A574; color:#0d2818; border-radius:10px; padding:20px; width:220px;">
+            <h3>Unsupervised Learning</h3>
+            <p><!-- descripción --></p>
+        </div>
+        <div class="card" style="background-color:#2D9B6F; color:white; border-radius:10px; padding:20px; width:220px;">
+            <h3>Reinforcement Learning</h3>
+            <p><!-- descripción --></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
