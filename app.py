@@ -15,7 +15,6 @@ def concepts():
 def types():
     return render_template("types.html")
 
-
 @app.route("/use-case-1")
 def use_case_1():
     return render_template("use_case_1.html")
