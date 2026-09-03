@@ -1,12 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Use Case 4{% endblock %}
+{% block title %}Use Case 4 - Game Playing Agent{% endblock %}
 {% block content %}
-<div style="text-align:center;">
-    <h1 style="color:#D4A574;">Use Case 4</h1>
-    <div class="intro" style="max-width:800px; margin:0 auto; text-align:left;">
-        <p>
-        
-        </p>
-    </div>
+<style>
+    .usecase-card { border-radius: 16px; padding: 32px; max-width: 700px; margin: 30px auto; box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+    .usecase-icon { font-size: 36px; margin-bottom: 8px; }
+    .usecase-number { font-size: 14px; font-weight: bold; letter-spacing: 1px; opacity: 0.75; text-transform: uppercase; }
+    .usecase-title { font-size: 22px; font-weight: bold; margin-bottom: 14px; }
+    .usecase-definition { font-size: 15px; font-style: italic; line-height: 1.5; padding: 14px 16px; border-radius: 10px; background-color: rgba(255,255,255,0.18); margin-bottom: 4px; }
+    .usecase-card hr { opacity: 0.25; margin: 16px 0; }
+    .usecase-label { font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85; margin-bottom: 2px; }
+    .usecase-text { font-size: 15px; margin-bottom: 14px; line-height: 1.45; }
+    .ml-badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; background-color: rgba(255,255,255,0.25); }
+</style>
+
+<h2 class="text-center mb-4" style="color:#8FBFA3;">Machine Learning Use Cases</h2>
+
+<div class="usecase-card" style="background-color:#5c8f77; color:white;">
+    
+    <div class="usecase-number">Use Case 04</div>
+    <div class="usecase-title">Game Playing Agent</div>
+    <span class="ml-badge">Reinforcement Learning</span>
+    <div class="usecase-definition">An agent that learns to make decisions by repeatedly interacting with a game environment, gradually improving its strategy based on the rewards and penalties it receives.</div>
+    <hr>
+    <div class="usecase-label">Problem Context</div>
+    <div class="usecase-text">Designing a strategy for a game manually is difficult when the number of possible situations is very large. An agent that learns through trial and error can discover effective strategies on its own.</div>
+    <div class="usecase-label">Data Used</div>
+    <div class="usecase-text">Game states, the actions the agent takes, and the rewards or penalties received after each action.</div>
+    <div class="usecase-label">Model Output</div>
+    <div class="usecase-text">The optimal sequence of actions (policy) that maximizes the agent's long-term score.</div>
+    <div class="usecase-label">Potential Benefit</div>
+    <div class="usecase-text">Automated discovery of effective strategies without needing to manually program every rule.</div>
 </div>
 {% endblock %}

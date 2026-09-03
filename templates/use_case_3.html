@@ -1,12 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Use Case 3{% endblock %}
+{% block title %}Use Case 3 - House Price Prediction{% endblock %}
 {% block content %}
-<div style="text-align:center;">
-    <h1 style="color:#D4A574;">Use Case 3</h1>
-    <div class="intro" style="max-width:800px; margin:0 auto; text-align:left;">
-        <p>
-            <!-- Escribe aquí el caso de uso 1 -->
-        </p>
-    </div>
+<style>
+    .usecase-card { border-radius: 16px; padding: 32px; max-width: 700px; margin: 30px auto; box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+    .usecase-icon { font-size: 36px; margin-bottom: 8px; }
+    .usecase-number { font-size: 14px; font-weight: bold; letter-spacing: 1px; opacity: 0.75; text-transform: uppercase; }
+    .usecase-title { font-size: 22px; font-weight: bold; margin-bottom: 14px; }
+    .usecase-definition { font-size: 15px; font-style: italic; line-height: 1.5; padding: 14px 16px; border-radius: 10px; background-color: rgba(255,255,255,0.18); margin-bottom: 4px; }
+    .usecase-card hr { opacity: 0.25; margin: 16px 0; }
+    .usecase-label { font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.85; margin-bottom: 2px; }
+    .usecase-text { font-size: 15px; margin-bottom: 14px; line-height: 1.45; }
+    .ml-badge { display: inline-block; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; background-color: rgba(255,255,255,0.25); }
+</style>
+
+<h2 class="text-center mb-4" style="color:#8FBFA3;">Machine Learning Use Cases</h2>
+
+<div class="usecase-card" style="background-color:#2D9B6F; color:white;">
+    
+    <div class="usecase-number">Use Case 03</div>
+    <div class="usecase-title">House Price Prediction</div>
+    <span class="ml-badge">Supervised Learning · Regression</span>
+    <div class="usecase-definition">A machine learning model trained on past property sales that learns the relationship between a house's characteristics and its market price, enabling accurate price estimation for new properties.</div>
+    <hr>
+    <div class="usecase-label">Problem Context</div>
+    <div class="usecase-text">Buyers, sellers, and real estate agents need a fair and consistent way to estimate a property's value based on measurable characteristics rather than subjective judgment.</div>
+    <div class="usecase-label">Data Used</div>
+    <div class="usecase-text">Square meters, number of rooms, location, age of the property, and nearby amenities.</div>
+    <div class="usecase-label">Model Output</div>
+    <div class="usecase-text">A numeric estimate of the property's sale price.</div>
+    <div class="usecase-label">Potential Benefit</div>
+    <div class="usecase-text">Fairer pricing decisions and faster property valuation for both buyers and sellers.</div>
 </div>
 {% endblock %}
