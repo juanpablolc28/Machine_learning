@@ -1,28 +1,103 @@
-{% extends "base.html" %}
-{% block title %}Types of Machine Learning{% endblock %}
-{% block content %}
-<div style="text-align:center;">
-    <h1 style="color:#D4A574;">Types of Machine Learning</h1>
-    <div class="intro" style="max-width:800px; margin:0 auto; text-align:left;">
-        <p>
-            <!-- Escribe aquí la explicación de los tipos de Machine Learning -->
-        </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types of Machine Learning</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d2818;
+            color: #f0f0f0;
+            margin: 0;
+            padding-bottom: 60px;
+        }
+        h2 { color: #8FBFA3; }
+        .card h6 { font-weight: bold; margin-top: 12px; margin-bottom: 4px; }
+        .dropdown-item:hover, .dropdown-item:focus {
+            background-color: #2D9B6F;
+            color: white;
+        }
+        .dropdown-menu {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#163321;">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color:#D4A574; font-weight:bold;">Data with Roots</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Machine Learning</a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background-color:#1a3d2a;">
+                            <li><a class="dropdown-item text-light" href="/concepts">Concepts</a></li>
+                            <li><a class="dropdown-item text-light" href="/types">Types of Machine Learning</a></li>
+                            <li><a class="dropdown-item text-light" href="/use-cases">Use Cases</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Supervised</a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background-color:#1a3d2a;">
+                            <li><h6 class="dropdown-header text-light">Linear Regression</h6></li>
+                            <li><a class="dropdown-item text-light" href="/linear-regression-concepts">Concepts</a></li>
+                            <li><a class="dropdown-item text-light" href="/LinearRegression">Application</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-5">Types of Machine Learning</h2>
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-md-4">
+                <div class="card h-100 p-4" style="background-color:#8FBFA3; color:#0d2818;">
+                    <h3>01</h3>
+                    <h5>Supervised Learning</h5>
+                    <p><strong>Definition:</strong> The model is trained on labeled data, learning to map inputs to known outputs.</p>
+                    <h6>Main characteristics</h6>
+                    <p>Requires labeled datasets; the correct answer is known during training; the model adjusts itself to minimize errors between its predictions and the real values.</p>
+                    <h6>Types of problems</h6>
+                    <p>Classification (e.g. spam detection) and regression (e.g. predicting a numeric value, like liters of gasoline from kilometers driven).</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 p-4" style="background-color:#D4A574; color:#0d2818;">
+                    <h3>02</h3>
+                    <h5>Unsupervised Learning</h5>
+                    <p><strong>Definition:</strong> The model works with unlabeled data, identifying patterns and structures on its own.</p>
+                    <h6>Main characteristics</h6>
+                    <p>No labeled answers are provided; the model looks for hidden structure or similarity in the data by itself.</p>
+                    <h6>Types of problems</h6>
+                    <p>Clustering (grouping similar customers) and dimensionality reduction (simplifying data while keeping its structure).</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 p-4" style="background-color:#2D9B6F; color:white;">
+                    <h3>03</h3>
+                    <h5>Reinforcement Learning</h5>
+                    <p><strong>Definition:</strong> The model learns by interacting with an environment, receiving rewards or penalties based on its actions.</p>
+                    <h6>Main characteristics</h6>
+                    <p>Learning happens through trial and error; there's an agent, an environment, and a reward signal guiding improvement over time.</p>
+                    <h6>Types of problems</h6>
+                    <p>Game playing, robotics control, and any scenario where an agent must make a sequence of decisions to maximize long-term reward.</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Ejemplo de tarjetas, reutiliza el estilo .card de index.html si quieres -->
-    <div class="cards" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:30px;">
-        <div class="card" style="background-color:#8FBFA3; color:#0d2818; border-radius:10px; padding:20px; width:220px;">
-            <h3>Supervised Learning</h3>
-            <p><!-- descripción --></p>
-        </div>
-        <div class="card" style="background-color:#D4A574; color:#0d2818; border-radius:10px; padding:20px; width:220px;">
-            <h3>Unsupervised Learning</h3>
-            <p><!-- descripción --></p>
-        </div>
-        <div class="card" style="background-color:#2D9B6F; color:white; border-radius:10px; padding:20px; width:220px;">
-            <h3>Reinforcement Learning</h3>
-            <p><!-- descripción --></p>
-        </div>
-    </div>
-</div>
-{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
