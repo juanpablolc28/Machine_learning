@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Logistic Regression Concepts{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 700px; margin: 0 auto 50px auto; }
+    .concept-card { background-color: #163321; border-radius: 14px; padding: 26px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .concept-title { color: #7fb08f; font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+    .concept-text { font-size: 15px; line-height: 1.5; color: #e8e8e8; }
+    .example-box { max-width: 800px; margin: 40px auto 0 auto; background-color: #1a3d2a; border-left: 4px solid #2D9B6F; border-radius: 8px; padding: 24px; }
+    .example-box h5 { color: #e0a872; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">Logistic Regression: Concepts</h1>
+    <p class="intro">The theoretical foundation behind Binary Logistic Regression, before seeing it applied to a real classification problem.</p>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">What is Logistic Regression?</div>
+                <div class="concept-text">Logistic Regression is a supervised Machine Learning algorithm used to estimate the probability that an observation belongs to a specific category, based on one or more independent variables. Instead of fitting a straight line like Linear Regression, it fits an S-shaped curve (the sigmoid function) that maps any input to a value between 0 and 1.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Why Is It a Classification Algorithm?</div>
+                <div class="concept-text">Even though it is called "regression," its output is a probability that is then converted into a discrete class using a threshold. Because the final result is a category (not a continuous number), it is used to solve classification problems.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Binary Classification</div>
+                <div class="concept-text">Binary classification is a task where the target variable can only take one of two possible values or classes. Logistic Regression in its simplest form is designed specifically to solve this type of problem.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Independent Variable (X)</div>
+                <div class="concept-text">The input variable(s) used by the model to estimate the probability of belonging to a class. In this application, the independent variable is the team's ball possession percentage during the match.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Dependent / Target Variable (y)</div>
+                <div class="concept-text">The variable the model tries to predict. It is categorical, not numeric, and represents the outcome the model classifies observations into.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Classes or Labels</div>
+                <div class="concept-text">The two possible outcomes of the target variable. In this application: <strong>0 = Loss / Draw</strong> and <strong>1 = Win</strong>.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Probability of Belonging to a Class</div>
+                <div class="concept-text">For every new observation, the model computes a value between 0 and 1 that represents how likely it is that the observation belongs to class 1. A value of 0.83, for example, means an 83% estimated chance of winning.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Classification Threshold</div>
+                <div class="concept-text">The cutoff point (commonly 0.5) used to convert a probability into a class. If the estimated probability is greater than or equal to the threshold, the observation is classified as class 1; otherwise, as class 0.</div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="concept-card">
+                <div class="concept-title">Linear Regression vs. Logistic Regression</div>
+                <div class="concept-text">Linear Regression predicts a continuous numeric value and fits a straight line to the data. Logistic Regression predicts the probability of a categorical outcome and fits an S-shaped (sigmoid) curve, always producing a result between 0 and 1 that is later mapped to a discrete class.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h5>Applied Example</h5>
+        <p class="mb-0">In this application, Logistic Regression is used to estimate whether a team will <strong>win</strong> a match based on its <strong>ball possession percentage</strong>. The target variable has two classes: <strong>0 = Loss / Draw</strong> and <strong>1 = Win</strong>. The model is trained on historical match data and, once trained, can classify new matches it has never seen before.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Logistic Regression Application{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    h2 { color: #7fb08f; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 750px; margin: 0 auto 40px auto; }
+    .section { max-width: 850px; margin: 0 auto 40px auto; background-color: #163321; border-radius: 14px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .section ul { line-height: 1.7; }
+    .badge-class { background-color: #2D9B6F; }
+    img.chart { display: block; margin: 20px auto 0 auto; border-radius: 10px; max-width: 100%; }
+    form { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+    input { padding: 8px; border-radius: 6px; border: none; width: 220px; text-align: center; }
+    button { padding: 10px 25px; border-radius: 8px; border: none; background-color: #2f9e6f; color: white; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: #257d58; }
+    .result-box { text-align: center; margin-top: 25px; padding: 20px; background-color: #1a3d2a; border-radius: 10px; }
+    .stat-card { background-color: #1a3d2a; border-radius: 10px; padding: 18px; text-align: center; }
+    .stat-value { font-size: 22px; font-weight: bold; color: #e0a872; }
+    .alert-custom { background-color: #4a1f1f; color: #f4c7c7; border-radius: 8px; padding: 12px; text-align: center; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">Logistic Regression: Application</h1>
+    <p class="intro">Predicting whether a team wins a match based on ball possession percentage, using a Binary Logistic Regression model trained with scikit-learn.</p>
+
+    <div class="section">
+        <h2>1. Problem Context</h2>
+        <p>This application analyzes football/basketball match data to determine whether a team's ball possession is associated with winning the match. Each row of data represents one match, describing how much of the ball possession a team held and what the final outcome was.</p>
+        <ul>
+            <li><strong>Independent variable:</strong> Possession percentage (%) held by the team during the match.</li>
+            <li><strong>Target variable:</strong> Match Result.</li>
+            <li><strong>Class 0:</strong> Loss / Draw &nbsp; <strong>Class 1:</strong> Win.</li>
+            <li><strong>Goal:</strong> Classify a new match as a Win or a Loss/Draw based on possession percentage.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Dataset</h2>
+        <p>The data is stored in <code>data/logistic_regression_match.csv</code> and loaded using Pandas.</p>
+        <div class="row g-3">
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_records }}</div>Total records</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_train }}</div>Training (80%)</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_test }}</div>Testing (20%)</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">1</div>Independent variable</div></div>
+        </div>
+        <ul class="mt-4">
+            <li><strong>Independent variable:</strong> {{ summary.independent_variable }}</li>
+            <li><strong>Target variable:</strong> {{ summary.target_variable }}</li>
+            <li><strong>{{ summary.class_0 }}</strong></li>
+            <li><strong>{{ summary.class_1 }}</strong></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Data Visualization</h2>
+        <p>Observations grouped by classification label (Win vs. Loss/Draw):</p>
+        <img class="chart" src="data:image/png;base64,{{ dataset_chart }}" alt="Dataset chart">
+    </div>
+
+    <div class="section">
+        <h2>4. Train / Test Split</h2>
+        <p>The dataset was split using scikit-learn's <code>train_test_split()</code>: <strong>80%</strong> of the matches were used to train the model, and the remaining <strong>20%</strong> were kept aside for testing (see the Evaluation Metrics page).</p>
+    </div>
+
+    <div class="section">
+        <h2>5. Model Pipeline</h2>
+        <p class="text-center mb-0">CSV Dataset &rarr; Pandas &rarr; X and y &rarr; 80/20 Split &rarr; Logistic Regression Training &rarr; Predictions &rarr; Evaluation &rarr; New Classifications</p>
+    </div>
+
+    <div class="section">
+        <h2>6. Binary Classification Form</h2>
+        <p>Enter a possession percentage to classify the match outcome using the trained model.</p>
+        <form method="post">
+            <label for="possession_pct">Possession Percentage (%)</label>
+            <input type="number" step="0.1" min="0" max="100" name="possession_pct" id="possession_pct" required value="{{ result.possession_pct if result else '' }}">
+            <button type="submit">Classify Match</button>
+        </form>
+
+        {% if error %}
+            <div class="alert-custom mt-4">{{ error }}</div>
+        {% endif %}
+
+        {% if result %}
+            <div class="result-box">
+                <h2 class="mb-2">Predicted class: <span class="badge badge-class">{{ result.class_name }}</span> (result = {{ result.prediction }})</h2>
+                <p>Estimated probability of <strong>Win</strong>: {{ result.prob_win }}% &nbsp;|&nbsp; Estimated probability of <strong>Loss/Draw</strong>: {{ result.prob_loss }}%</p>
+                <p class="mb-0">
+                    {% if result.prediction == 1 %}
+                        With a possession of {{ result.possession_pct }}%, the model estimates that the team is more likely to <strong>win</strong> the match.
+                    {% else %}
+                        With a possession of {{ result.possession_pct }}%, the model estimates that the team is more likely to <strong>lose or draw</strong> the match.
+                    {% endif %}
+                </p>
+                <img class="chart" src="data:image/png;base64,{{ result.chart }}" alt="Prediction chart">
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

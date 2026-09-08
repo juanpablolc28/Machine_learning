@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}LDA Evaluation Metrics{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    h2 { color: #7fb08f; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 750px; margin: 0 auto 40px auto; }
+    .section { max-width: 850px; margin: 0 auto 40px auto; background-color: #163321; border-radius: 14px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    table.confusion { margin: 0 auto; border-collapse: collapse; }
+    table.confusion th, table.confusion td { border: 1px solid #2D9B6F; padding: 16px 26px; text-align: center; }
+    table.confusion th { background-color: #1a3d2a; color: #e0a872; }
+    .cm-tp { background-color: rgba(47,158,111,0.35); }
+    .cm-tn { background-color: rgba(47,158,111,0.2); }
+    .cm-fp { background-color: rgba(224,168,114,0.3); }
+    .cm-fn { background-color: rgba(224,168,114,0.45); }
+    .metric-card { background-color: #1a3d2a; border-radius: 12px; padding: 22px; text-align: center; height: 100%; }
+    .metric-value { font-size: 30px; font-weight: bold; color: #e0a872; }
+    .metric-label { color: #b8d4c2; }
+    table.compare { width: 100%; border-collapse: collapse; }
+    table.compare th, table.compare td { border: 1px solid #2D9B6F; padding: 10px 14px; text-align: center; }
+    table.compare th { background-color: #1a3d2a; color: #e0a872; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">LDA: Evaluation Metrics</h1>
+    <p class="intro">Performance of the Linear Discriminant Analysis model, measured on the 20% testing dataset ({{ metrics.n_test }} matches) that was not used during training.</p>
+
+    <div class="section">
+        <h2 class="text-center">Confusion Matrix</h2>
+        <div class="table-responsive">
+            <table class="confusion">
+                <tr>
+                    <th></th>
+                    <th>Predicted: Loss/Draw (0)</th>
+                    <th>Predicted: Win (1)</th>
+                </tr>
+                <tr>
+                    <th>Actual: Loss/Draw (0)</th>
+                    <td class="cm-tn">TN = {{ metrics.tn }}</td>
+                    <td class="cm-fp">FP = {{ metrics.fp }}</td>
+                </tr>
+                <tr>
+                    <th>Actual: Win (1)</th>
+                    <td class="cm-fn">FN = {{ metrics.fn }}</td>
+                    <td class="cm-tp">TP = {{ metrics.tp }}</td>
+                </tr>
+            </table>
+        </div>
+        <ul class="mt-4">
+            <li><strong>True Positives (TP = {{ metrics.tp }}):</strong> Matches correctly classified as Win.</li>
+            <li><strong>True Negatives (TN = {{ metrics.tn }}):</strong> Matches correctly classified as Loss/Draw.</li>
+            <li><strong>False Positives (FP = {{ metrics.fp }}):</strong> Matches predicted as Win but actually Loss/Draw.</li>
+            <li><strong>False Negatives (FN = {{ metrics.fn }}):</strong> Matches predicted as Loss/Draw but actually a Win.</li>
+        </ul>
+        <p class="mb-0"><strong>Interpretation:</strong> By combining four performance indicators instead of one, LDA can capture more of the relationship between match performance and outcome, which is reflected in a reduced number of misclassifications compared to relying on possession alone.</p>
+    </div>
+
+    <div class="section">
+        <h2 class="text-center mb-4">Classification Metrics</h2>
+        <div class="row g-3">
+            <div class="col-md-3 col-6">
+                <div class="metric-card">
+                    <div class="metric-value">{{ metrics.accuracy }}%</div>
+                    <div class="metric-label">Accuracy</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card">
+                    <div class="metric-value">{{ metrics.precision }}%</div>
+                    <div class="metric-label">Precision</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card">
+                    <div class="metric-value">{{ metrics.recall }}%</div>
+                    <div class="metric-label">Recall</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="metric-card">
+                    <div class="metric-value">{{ metrics.f1 }}%</div>
+                    <div class="metric-label">F1-score</div>
+                </div>
+            </div>
+        </div>
+        <p class="mt-4 mb-0"><strong>Interpretation:</strong> Accuracy summarizes the overall proportion of correctly classified matches. Precision reflects how trustworthy a "Win" prediction is, while Recall shows how many real wins the model successfully identifies. Combining multiple performance indicators generally allows LDA to reach a more balanced and informed classification than a single-variable model.</p>
+    </div>
+
+    <div class="section">
+        <h2 class="text-center mb-4">Model Comparison: Logistic Regression vs. LDA</h2>
+        <div class="table-responsive">
+            <table class="compare">
+                <tr>
+                    <th>Metric</th>
+                    <th>Logistic Regression (1 variable)</th>
+                    <th>LDA (4 variables)</th>
+                </tr>
+                <tr>
+                    <td>Accuracy</td>
+                    <td>See Logistic Regression Evaluation Metrics page</td>
+                    <td>{{ metrics.accuracy }}%</td>
+                </tr>
+                <tr>
+                    <td>Precision</td>
+                    <td>See Logistic Regression Evaluation Metrics page</td>
+                    <td>{{ metrics.precision }}%</td>
+                </tr>
+            </table>
+        </div>
+        <p class="mt-3 mb-0">Using more independent variables (possession, shots on target, average goals scored and home advantage) gives the LDA model more information about each match, which generally results in a more complete classification than the single-variable Logistic Regression model.</p>
+    </div>
+</div>
+{% endblock %}
