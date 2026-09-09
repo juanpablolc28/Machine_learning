@@ -4,6 +4,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64
+import numpy as np
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
@@ -17,7 +18,7 @@ X = match_df[FEATURES]
 y = match_df["result"]
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X, y, test_size=0.1, random_state=42
 )
 
 lda_model = LinearDiscriminantAnalysis()
@@ -63,10 +64,25 @@ def generate_dataset_chart():
     wins = match_df[match_df["result"] == 1]
     losses = match_df[match_df["result"] == 0]
 
-    plt.scatter(wins["possession_pct"], wins["shots_on_target"], color="#2f9e6f",
-                alpha=0.6, s=25, label="Win (1)")
-    plt.scatter(losses["possession_pct"], losses["shots_on_target"], color="#e0a872",
-                alpha=0.6, s=25, label="Loss / Draw (0)")
+    plt.scatter(wins["possession_pct"], wins["shots_on_target"], color="#1b7a4d",
+                edgecolor="white", linewidth=0.4, alpha=0.85, s=32, label="Win (1)")
+    plt.scatter(losses["possession_pct"], losses["shots_on_target"], color="#d9822b",
+                edgecolor="white", linewidth=0.4, alpha=0.85, s=32, label="Loss / Draw (0)")
+    x_min, x_max = plt.xlim()
+    y_min, y_max = plt.ylim()
+
+    avg_goals_mean = match_df["avg_goals_scored"].mean()
+    home_mean = match_df["home_advantage"].mean()
+
+    w = lda_model.coef_[0]
+    b = lda_model.intercept_[0]
+
+    x_vals = np.linspace(x_min, x_max, 100)
+    y_vals = -(w[0] * x_vals + w[2] * avg_goals_mean + w[3] * home_mean + b) / w[1]
+
+    plt.plot(x_vals, y_vals, color="#333333", linewidth=1.8, label="Decision boundary")
+    plt.xlim(x_min, x_max)
+    plt.ylim(y_min, y_max)
 
     plt.title("Match Result: Possession vs Shots on Target")
     plt.xlabel("Possession Percentage (%)")
@@ -86,10 +102,26 @@ def generate_prediction_chart(possession_pct, shots_on_target, prediction):
     wins = match_df[match_df["result"] == 1]
     losses = match_df[match_df["result"] == 0]
 
-    plt.scatter(wins["possession_pct"], wins["shots_on_target"], color="#2f9e6f",
-                alpha=0.5, s=25, label="Win (1)")
-    plt.scatter(losses["possession_pct"], losses["shots_on_target"], color="#e0a872",
-                alpha=0.5, s=25, label="Loss / Draw (0)")
+    plt.scatter(wins["possession_pct"], wins["shots_on_target"], color="#1b7a4d",
+                edgecolor="white", linewidth=0.4, alpha=0.85, s=32, label="Win (1)")
+    plt.scatter(losses["possession_pct"], losses["shots_on_target"], color="#d9822b",
+                edgecolor="white", linewidth=0.4, alpha=0.85, s=32, label="Loss / Draw (0)")
+    x_min, x_max = plt.xlim()
+    y_min, y_max = plt.ylim()
+
+    avg_goals_mean = match_df["avg_goals_scored"].mean()
+    home_mean = match_df["home_advantage"].mean()
+
+    w = lda_model.coef_[0]
+    b = lda_model.intercept_[0]
+
+    x_vals = np.linspace(x_min, x_max, 100)
+    y_vals = -(w[0] * x_vals + w[2] * avg_goals_mean + w[3] * home_mean + b) / w[1]
+
+    plt.plot(x_vals, y_vals, color="#333333", linewidth=1.8, label="Decision boundary")
+    plt.xlim(x_min, x_max)
+    plt.ylim(y_min, y_max)
+
     plt.scatter([possession_pct], [shots_on_target], color="#D4A574", s=160,
                 edgecolor="black", zorder=5, marker="D", label="New prediction")
 
