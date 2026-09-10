@@ -41,8 +41,8 @@
         <p>The data is stored in <code>data/lda_match.csv</code> and loaded using Pandas.</p>
         <div class="row g-3">
             <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_records }}</div>Total records</div></div>
-            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_train }}</div>Training (80%)</div></div>
-            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_test }}</div>Testing (20%)</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_train }}</div>Training (90%)</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_test }}</div>Testing (10%)</div></div>
             <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">4</div>Independent variables</div></div>
         </div>
         <ul class="mt-4">
@@ -63,12 +63,12 @@
 
     <div class="section">
         <h2>4. Train / Test Split</h2>
-        <p>The dataset was split using scikit-learn's <code>train_test_split()</code>: <strong>80%</strong> of the matches were used to train the model, and the remaining <strong>20%</strong> were kept aside for testing (see the Evaluation Metrics page).</p>
+        <p>The dataset was split using scikit-learn's <code>train_test_split()</code>: <strong>90%</strong> of the matches were used to train the model, and the remaining <strong>10%</strong> were kept aside for testing (see the Evaluation Metrics page).</p>
     </div>
 
     <div class="section">
         <h2>5. Model Pipeline</h2>
-        <p class="text-center mb-0">CSV Dataset &rarr; Pandas &rarr; X (4 variables) and y &rarr; 80/20 Split &rarr; LDA Training &rarr; Predictions &rarr; Evaluation &rarr; New Classifications</p>
+        <p class="text-center mb-0">CSV Dataset &rarr; Pandas &rarr; X (4 variables) and y &rarr; 90/10 Split &rarr; LDA Training &rarr; Predictions &rarr; Evaluation &rarr; New Classifications</p>
     </div>
 
     <div class="section">
