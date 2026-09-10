@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}LDA Concepts{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 700px; margin: 0 auto 50px auto; }
+    .concept-card { background-color: #163321; border-radius: 14px; padding: 26px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .concept-title { color: #7fb08f; font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+    .concept-text { font-size: 15px; line-height: 1.5; color: #e8e8e8; }
+    .example-box { max-width: 800px; margin: 40px auto 0 auto; background-color: #1a3d2a; border-left: 4px solid #2D9B6F; border-radius: 8px; padding: 24px; }
+    .example-box h5 { color: #e0a872; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">Linear Discriminant Analysis (LDA): Concepts</h1>
+    <p class="intro">Theoretical foundation of the assigned classification algorithm for this group.</p>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Name and Definition</div>
+                <div class="concept-text">Linear Discriminant Analysis (LDA) is a supervised classification algorithm that finds the linear combination of independent variables that best separates two or more classes, by maximizing the distance between class means while minimizing the variance within each class.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">How It Works</div>
+                <div class="concept-text">LDA assumes that each class follows a normal (Gaussian) distribution with a shared covariance matrix across classes. It computes a linear "discriminant function" that projects the independent variables onto a new axis where the classes are as separated as possible, and then classifies new observations according to which class mean they are closest to on that axis.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Types of Problems It Solves</div>
+                <div class="concept-text">LDA is used for classification problems (binary or multi-class) where the goal is to assign an observation to one of several predefined categories using two or more numeric independent variables. It is also commonly used for dimensionality reduction prior to classification.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Main Characteristics</div>
+                <div class="concept-text">It is a linear model, it uses class-conditional Gaussian assumptions, it estimates class probabilities, and it can naturally handle more than two independent variables and more than two classes at once.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Advantages</div>
+                <div class="concept-text">LDA is computationally efficient, works well with a moderate number of features, tends to perform well when classes are approximately normally distributed and well separated, and provides interpretable, probability-based results.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Limitations</div>
+                <div class="concept-text">Its linear decision boundary struggles with classes that are not linearly separable, its performance degrades if the normality or equal-covariance assumptions are strongly violated, and it can be sensitive to outliers.</div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="concept-card">
+                <div class="concept-title">Real-World Example</div>
+                <div class="concept-text">Predicting whether a sports team will win a match based on several performance indicators collected during the game, such as possession percentage, shots on target, average goals scored, and whether the team played at home. LDA combines all of these variables into a single discriminant score used to classify the match outcome.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h5>Applied Example</h5>
+        <p class="mb-0">In this application, LDA is used to classify a match as a <strong>Win</strong> or <strong>Loss/Draw</strong> using four independent variables together: possession percentage, shots on target, average goals scored, and home advantage. Unlike the single-variable Logistic Regression model, LDA combines multiple performance indicators to make a more informed classification.</p>
+    </div>
+</div>
+{% endblock %}

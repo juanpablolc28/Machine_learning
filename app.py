@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 import LinearRegression
+import LogisticRegressionModel
+import LDAModel
 
 app = Flask(__name__)
 
@@ -57,6 +59,98 @@ def calculate():
         co2=co2,
         gas_chart=gas_chart
     )
+
+@app.route("/logistic-regression-concepts")
+def logistic_regression_concepts():
+    return render_template("logistic_regression_concepts.html")
+
+
+@app.route("/LogisticRegression", methods=["GET", "POST"])
+def logistic_regression_application():
+    result = None
+    error = None
+
+    if request.method == "POST":
+        try:
+            possession_pct = float(request.form["possession_pct"])
+            if not (0 <= possession_pct <= 100):
+                raise ValueError("Possession percentage must be between 0 and 100.")
+            result = LogisticRegressionModel.predict_result(possession_pct)
+            result["chart"] = LogisticRegressionModel.generate_prediction_chart(
+                possession_pct, result["prediction"]
+            )
+            result["possession_pct"] = possession_pct
+        except (ValueError, KeyError):
+            error = "Please enter a valid possession percentage between 0 and 100."
+
+    return render_template(
+        "logistic_regression_application.html",
+        summary=LogisticRegressionModel.get_dataset_summary(),
+        dataset_chart=LogisticRegressionModel.generate_dataset_chart(),
+        result=result,
+        error=error,
+    )
+
+
+@app.route("/logistic-regression-metrics")
+def logistic_regression_metrics():
+    return render_template(
+        "logistic_regression_metrics.html",
+        metrics=LogisticRegressionModel.get_evaluation_metrics(),
+    )
+
+
+@app.route("/lda-concepts")
+def lda_concepts():
+    return render_template("lda_concepts.html")
+
+
+@app.route("/LDA", methods=["GET", "POST"])
+def lda_application():
+    result = None
+    error = None
+
+    if request.method == "POST":
+        try:
+            possession_pct = float(request.form["possession_pct"])
+            shots_on_target = float(request.form["shots_on_target"])
+            avg_goals_scored = float(request.form["avg_goals_scored"])
+            home_advantage = int(request.form["home_advantage"])
+
+            if not (0 <= possession_pct <= 100):
+                raise ValueError("Invalid possession percentage.")
+            if shots_on_target < 0 or avg_goals_scored < 0:
+                raise ValueError("Values must be non-negative.")
+
+            result = LDAModel.predict_result(
+                possession_pct, shots_on_target, avg_goals_scored, home_advantage
+            )
+            result["chart"] = LDAModel.generate_prediction_chart(
+                possession_pct, shots_on_target, result["prediction"]
+            )
+            result["possession_pct"] = possession_pct
+            result["shots_on_target"] = shots_on_target
+            result["avg_goals_scored"] = avg_goals_scored
+            result["home_advantage"] = home_advantage
+        except (ValueError, KeyError):
+            error = "Please fill in all fields with valid numeric values."
+
+    return render_template(
+        "lda_application.html",
+        summary=LDAModel.get_dataset_summary(),
+        dataset_chart=LDAModel.generate_dataset_chart(),
+        result=result,
+        error=error,
+    )
+
+
+@app.route("/lda-metrics")
+def lda_metrics():
+    return render_template(
+        "lda_metrics.html",
+        metrics=LDAModel.get_evaluation_metrics(),
+    )
+
 
 if __name__ == '__main__':
     app.run(debug=True)
