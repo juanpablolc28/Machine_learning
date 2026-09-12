@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import LinearRegression
 import LogisticRegressionModel
 import LDAModel
+import clusteringExample
 
 app = Flask(__name__)
 
@@ -150,7 +151,10 @@ def lda_metrics():
         "lda_metrics.html",
         metrics=LDAModel.get_evaluation_metrics(),
     )
-
+@app.route("/Cluster")
+def Cluster():
+    info = clusteringExample.implementClustering()
+    return info("results")
 
 if __name__ == '__main__':
     app.run(debug=True)
