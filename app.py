@@ -151,10 +151,30 @@ def lda_metrics():
         "lda_metrics.html",
         metrics=LDAModel.get_evaluation_metrics(),
     )
-@app.route("/Cluster")
-def Cluster():
-    info = clusteringExample.implementClustering()
-    return info("results")
+
+
+@app.route("/kmeans-concepts")
+def kmeans_concepts():
+    return render_template("kmeans_concepts.html")
+
+
+@app.route("/manual-exercise")
+def manual_exercise():
+    return render_template("manual_exercise.html")
+
+
+@app.route("/clustering-application")
+def clustering_application():
+    return render_template(
+        "clustering_application.html",
+        summary=clusteringExample.get_dataset_summary(),
+        cluster_summary=clusteringExample.get_cluster_summary(),
+        sample_records=clusteringExample.get_sample_records(),
+        silhouette=clusteringExample.get_silhouette_score(),
+        chart=clusteringExample.generate_cluster_chart(),
+        interpretation=clusteringExample.get_cluster_interpretation(),
+    )
+
 
 if __name__ == '__main__':
     app.run(debug=True)
