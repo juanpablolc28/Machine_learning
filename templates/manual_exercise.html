@@ -6,15 +6,50 @@
     h2 { color: #7fb08f; }
     .intro { text-align: center; color: #b8d4c2; max-width: 750px; margin: 0 auto 40px auto; }
     .section { max-width: 850px; margin: 0 auto 40px auto; background-color: #163321; border-radius: 14px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 8px 12px; text-align: center; border-bottom: 1px solid #2a4d38; color: #d8ead9; }
+    th { color: #e0a872; }
+    img.kmeans-plot { display: block; margin: 20px auto 0 auto; max-width: 100%; border-radius: 10px; }
 </style>
 
 <div class="container my-5">
     <h1 class="mb-3">K-Means: Manual Exercise</h1>
-    <p class="intro">Step-by-step manual computation of K-Means using two variables: possession percentage and shots on target.</p>
+    <p class="intro">Step-by-step manual computation of K-Means using two variables: possession percentage and shots on target, over {{ total_registros }} simulated matches.</p>
 
     <div class="section">
-        <h2>Coming soon</h2>
-        <p class="mb-0">This page will show the 100-record dataset, the initial centroids, the Euclidean distance calculations, the cluster reassignments across iterations, the variance (SSE) per cluster, and the scatter plots for the initial situation and each iteration once that part of the exercise is ready.</p>
+        <h2>Initial situation</h2>
+        <p>Starting points and the 3 initial centroids, before any assignment.</p>
+        <img class="kmeans-plot" src="{{ url_for('static', filename=initial_plot) }}" alt="Initial scatter plot">
     </div>
+
+    {% for it in iteraciones %}
+    <div class="section">
+        <h2>Iteration {{ it.numero }}</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Cluster</th>
+                    <th>Centroid (possession)</th>
+                    <th>Centroid (shots on target)</th>
+                    <th>SSE (variance)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in it.centroides %}
+                <tr>
+                    <td>{{ c.cluster }}</td>
+                    <td>{{ c.possession }}</td>
+                    <td>{{ c.shots_on_target }}</td>
+                    <td>{{ it.sse_por_cluster[c.cluster] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="mt-2"><strong>Total SSE:</strong> {{ it.sse_total }}</p>
+
+        <img class="kmeans-plot" src="{{ url_for('static', filename=it.plot) }}" alt="Iteration {{ it.numero }} scatter plot">
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
