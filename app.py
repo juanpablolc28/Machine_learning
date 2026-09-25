@@ -179,13 +179,20 @@ def manual_exercise():
             "sse_por_cluster": r["sse_por_cluster"],
             "sse_total": r["sse_total"],
             "plot": os.path.relpath(r["plot"], "static").replace("\\", "/"),
+            "tabla": r["tabla"],
         })
+
+    varianza_comparacion = [
+        {"iteracion": it["numero"], "sse_total": it["sse_total"]}
+        for it in iteraciones
+    ]
 
     return render_template(
         "manual_exercise.html",
         total_registros=len(df_final),
         initial_plot=initial_plot,
         iteraciones=iteraciones,
+        varianza_comparacion=varianza_comparacion,
     )
 
 

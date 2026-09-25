@@ -83,7 +83,23 @@ def asignar_y_recalcular(df, centroides):
         if len(puntos_cluster) > 0:
             nuevos_centroides[k] = puntos_cluster.mean().to_numpy()
 
-    return df, nuevos_centroides
+    return df, nuevos_centroides, dist
+
+
+def tabla_distancias(df, dist):
+    df = df.reset_index(drop=True)
+    filas = []
+    for i, row in df.iterrows():
+        fila = {
+            "id": int(row["id"]),
+            "possession": row["possession"],
+            "shots_on_target": row["shots_on_target"],
+            "cluster": int(row["cluster"]),
+        }
+        for k in range(dist.shape[1]):
+            fila[f"dist_c{k}"] = round(float(dist[i, k]), 2)
+        filas.append(fila)
+    return filas
 
 
 def varianza_por_cluster(df, centroides):
@@ -137,8 +153,9 @@ def ejecutar_kmeans_manual():
     graficar(df, centroides, "Situacion inicial", "iteracion_0_inicial.png",
               con_cluster=False)
     for i in range(1, N_ITERACIONES + 1):
-        df, centroides = asignar_y_recalcular(df, centroides)
+        df, centroides, dist = asignar_y_recalcular(df, centroides)
         sse = varianza_por_cluster(df, centroides)
+        tabla = tabla_distancias(df, dist)
         ruta_plot = graficar(df, centroides, f"Iteracion {i}",
                               f"iteracion_{i}.png", con_cluster=True)
 
@@ -148,6 +165,7 @@ def ejecutar_kmeans_manual():
             "sse_por_cluster": sse,
             "sse_total": round(sum(sse.values()), 2),
             "plot": ruta_plot,
+            "tabla": tabla,
         })
 
     return df, centroides, resultados_por_iteracion

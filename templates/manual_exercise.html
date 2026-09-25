@@ -10,6 +10,9 @@
     th, td { padding: 8px 12px; text-align: center; border-bottom: 1px solid #2a4d38; color: #d8ead9; }
     th { color: #e0a872; }
     img.kmeans-plot { display: block; margin: 20px auto 0 auto; max-width: 100%; border-radius: 10px; }
+    .table-scroll { max-height: 320px; overflow-y: auto; overflow-x: auto; margin-top: 15px; border: 1px solid #2a4d38; border-radius: 8px; }
+    .table-scroll table { margin-top: 0; }
+    .table-scroll thead th { position: sticky; top: 0; background-color: #163321; }
 </style>
 
 <div class="container my-5">
@@ -49,7 +52,58 @@
         <p class="mt-2"><strong>Total SSE:</strong> {{ it.sse_total }}</p>
 
         <img class="kmeans-plot" src="{{ url_for('static', filename=it.plot) }}" alt="Iteration {{ it.numero }} scatter plot">
+
+        <h3 class="mt-4" style="color:#7fb08f; font-size:17px;">Distance table (per record)</h3>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Possession</th>
+                        <th>Shots on target</th>
+                        <th>Dist. to C0</th>
+                        <th>Dist. to C1</th>
+                        <th>Dist. to C2</th>
+                        <th>Assigned cluster</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in it.tabla %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.possession }}</td>
+                        <td>{{ row.shots_on_target }}</td>
+                        <td>{{ row.dist_c0 }}</td>
+                        <td>{{ row.dist_c1 }}</td>
+                        <td>{{ row.dist_c2 }}</td>
+                        <td>{{ row.cluster }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     {% endfor %}
+
+    <div class="section">
+        <h2>Variance comparison across iterations</h2>
+        <p>Total SSE (sum of squared distances to the assigned centroid) at the end of each iteration.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Iteration</th>
+                    <th>Total SSE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in varianza_comparacion %}
+                <tr>
+                    <td>{{ v.iteracion }}</td>
+                    <td>{{ v.sse_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
