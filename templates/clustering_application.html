@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Clustering Application{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    h2 { color: #7fb08f; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 750px; margin: 0 auto 40px auto; }
+    .section { max-width: 900px; margin: 0 auto 40px auto; background-color: #163321; border-radius: 14px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .section ul { line-height: 1.7; }
+    img.chart { display: block; margin: 20px auto 0 auto; border-radius: 10px; max-width: 100%; }
+    .stat-card { background-color: #1a3d2a; border-radius: 10px; padding: 18px; text-align: center; }
+    .stat-value { font-size: 22px; font-weight: bold; color: #e0a872; }
+    table.compare { width: 100%; border-collapse: collapse; }
+    table.compare th, table.compare td { border: 1px solid #2D9B6F; padding: 10px 14px; text-align: center; }
+    table.compare th { background-color: #1a3d2a; color: #e0a872; }
+    .table-responsive table { color: #f4f4f4; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">K-Means Clustering: Application</h1>
+    <p class="intro">Grouping football matches into performance tiers using five combined indicators, with a K-Means model (k = 3) trained with scikit-learn.</p>
+
+    <div class="section">
+        <h2>1. Problem Context</h2>
+        <p>This application groups football matches by performance profile without using the final result as a label. Each row of data represents one team's statistics in a single match.</p>
+        <ul>
+            {% for feature in summary.features %}
+            <li><strong>{{ feature }}</strong></li>
+            {% endfor %}
+            <li><strong>Goal:</strong> Discover natural groupings among matches using all five variables together, then interpret each group's profile.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. Dataset</h2>
+        <p>The data comes from <strong>{{ summary.source }}</strong> and is loaded using Pandas.</p>
+        <div class="row g-3">
+            <div class="col-md-4 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_records }}</div>Total records</div></div>
+            <div class="col-md-4 col-6"><div class="stat-card"><div class="stat-value">{{ summary.n_clusters }}</div>Clusters (k)</div></div>
+            <div class="col-md-4 col-6"><div class="stat-card"><div class="stat-value">5</div>Independent variables</div></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. Data Visualization</h2>
+        <p>Matches grouped by cluster, shown using two of the most relevant variables (possession vs. shots on target); all five variables are used to train the model.</p>
+        <img class="chart" src="data:image/png;base64,{{ chart }}" alt="Cluster scatter chart">
+    </div>
+
+    <div class="section">
+        <h2>4. Cluster Summary</h2>
+        <p>Centroid coordinates (in original units) and win rate observed within each cluster.</p>
+        <div class="table-responsive">
+            <table class="compare">
+                <tr>
+                    <th>Cluster</th>
+                    <th>Records</th>
+                    <th>Win Rate</th>
+                    <th>Possession</th>
+                    <th>Shots on Target</th>
+                    <th>Avg. Goals Scored</th>
+                    <th>Avg. Goals Conceded</th>
+                    <th>Home Advantage</th>
+                </tr>
+                {% for row in cluster_summary %}
+                <tr>
+                    <td>{{ row.cluster }}</td>
+                    <td>{{ row.n_records }}</td>
+                    <td>{{ row.win_rate }}%</td>
+                    <td>{{ row.centroid.poss }}</td>
+                    <td>{{ row.centroid.sot }}</td>
+                    <td>{{ row.centroid.gf }}</td>
+                    <td>{{ row.centroid.ga }}</td>
+                    <td>{{ row.centroid.home_advantage }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>5. Model Evaluation</h2>
+        <div class="row g-3">
+            <div class="col-md-4 col-6"><div class="stat-card"><div class="stat-value">{{ silhouette }}</div>Silhouette Score</div></div>
+        </div>
+        <p class="mt-4 mb-0"><strong>Interpretation:</strong> The silhouette score measures how well-separated the clusters are, ranging from -1 (poorly separated) to 1 (well separated). A positive score indicates that matches are, on average, more similar to their own cluster than to the neighboring one.</p>
+    </div>
+
+    <div class="section">
+        <h2>6. Cluster Interpretation</h2>
+        <ul>
+            {% for name, description in interpretation.items() %}
+            <li><strong>{{ name }}:</strong> {{ description }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>7. Sample Records</h2>
+        <div class="table-responsive">
+            <table class="compare">
+                <tr>
+                    <th>Team</th>
+                    <th>Opponent</th>
+                    <th>Season</th>
+                    <th>Possession</th>
+                    <th>Shots on Target</th>
+                    <th>Goals Scored</th>
+                    <th>Goals Conceded</th>
+                    <th>Home Advantage</th>
+                    <th>Cluster</th>
+                </tr>
+                {% for record in sample_records %}
+                <tr>
+                    <td>{{ record.team }}</td>
+                    <td>{{ record.opponent }}</td>
+                    <td>{{ record.season }}</td>
+                    <td>{{ record.poss }}</td>
+                    <td>{{ record.sot }}</td>
+                    <td>{{ record.gf }}</td>
+                    <td>{{ record.ga }}</td>
+                    <td>{{ record.home_advantage }}</td>
+                    <td>{{ record.cluster }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

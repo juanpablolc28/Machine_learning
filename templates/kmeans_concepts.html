@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}K-Means Concepts{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 700px; margin: 0 auto 50px auto; }
+    .concept-card { background-color: #163321; border-radius: 14px; padding: 26px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .concept-title { color: #7fb08f; font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+    .concept-text { font-size: 15px; line-height: 1.5; color: #e8e8e8; }
+    .example-box { max-width: 800px; margin: 40px auto 0 auto; background-color: #1a3d2a; border-left: 4px solid #2D9B6F; border-radius: 8px; padding: 24px; }
+    .example-box h5 { color: #e0a872; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">K-Means Clustering: Concepts</h1>
+    <p class="intro">Theoretical foundation of the assigned unsupervised learning algorithm for this group.</p>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Name and Definition</div>
+                <div class="concept-text">K-Means is an unsupervised clustering algorithm that partitions a set of observations into <strong>k</strong> groups (clusters), assigning each observation to the cluster whose centroid (mean) is closest to it.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">How It Works</div>
+                <div class="concept-text">The algorithm starts by placing k initial centroids, then repeats two steps until convergence: (1) assign each record to the nearest centroid using Euclidean distance, and (2) recompute each centroid as the mean of the records assigned to it. This iterative process minimizes the within-cluster variance.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Types of Problems It Solves</div>
+                <div class="concept-text">K-Means is used for exploratory grouping problems where there is no predefined target/label, such as customer segmentation, document grouping, image compression, and, in this project, grouping football matches by performance profile.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Main Characteristics</div>
+                <div class="concept-text">It is an unsupervised, iterative, distance-based algorithm. The number of clusters (k) must be chosen beforehand, and numeric features are typically standardized before training so that no single variable dominates the distance calculation.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Advantages</div>
+                <div class="concept-text">K-Means is simple to understand, computationally efficient even on large datasets, and scales well. It works particularly well when clusters are roughly spherical and similarly sized.</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="concept-card">
+                <div class="concept-title">Limitations</div>
+                <div class="concept-text">The number of clusters k must be chosen in advance, results depend on the initial centroid positions, it assumes roughly spherical clusters of similar size, and it is sensitive to outliers and to unscaled features.</div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="concept-card">
+                <div class="concept-title">Real-World Example</div>
+                <div class="concept-text">Grouping football matches into performance tiers (e.g., low, moderate, and high) based on possession, shots on target, average goals scored, average goals conceded, and home advantage, without knowing beforehand which matches belong to which tier.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h5>Applied Example</h5>
+        <p class="mb-0">In this application, K-Means (k = 3) is used to group football matches into performance tiers using five variables together: possession percentage, shots on target, average goals scored, average goals conceded, and home advantage. Unlike the classification models in the Supervised section, K-Means does not use the match result as a label &mdash; it discovers the grouping structure directly from the performance statistics.</p>
+    </div>
+</div>
+{% endblock %}

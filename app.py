@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 import LinearRegression
 import LogisticRegressionModel
 import LDAModel
+import clusteringExample
+import os
+import kmeans_manual
 
 app = Flask(__name__)
 
@@ -149,6 +152,60 @@ def lda_metrics():
     return render_template(
         "lda_metrics.html",
         metrics=LDAModel.get_evaluation_metrics(),
+    )
+
+
+@app.route("/kmeans-concepts")
+def kmeans_concepts():
+    return render_template("kmeans_concepts.html")
+
+
+@app.route("/manual-exercise")
+def manual_exercise():
+    df_final, centroides_finales, historial = kmeans_manual.ejecutar_kmeans_manual()
+
+    initial_plot = os.path.relpath(
+        os.path.join(kmeans_manual.PLOTS_DIR, "iteracion_0_inicial.png"), "static"
+    ).replace("\\", "/")
+
+    iteraciones = []
+    for r in historial:
+        iteraciones.append({
+            "numero": r["iteracion"],
+            "centroides": [
+                {"cluster": i, "possession": round(c[0], 2), "shots_on_target": round(c[1], 2)}
+                for i, c in enumerate(r["centroides"])
+            ],
+            "sse_por_cluster": r["sse_por_cluster"],
+            "sse_total": r["sse_total"],
+            "plot": os.path.relpath(r["plot"], "static").replace("\\", "/"),
+            "tabla": r["tabla"],
+        })
+
+    varianza_comparacion = [
+        {"iteracion": it["numero"], "sse_total": it["sse_total"]}
+        for it in iteraciones
+    ]
+
+    return render_template(
+        "manual_exercise.html",
+        total_registros=len(df_final),
+        initial_plot=initial_plot,
+        iteraciones=iteraciones,
+        varianza_comparacion=varianza_comparacion,
+    )
+
+
+@app.route("/clustering-application")
+def clustering_application():
+    return render_template(
+        "clustering_application.html",
+        summary=clusteringExample.get_dataset_summary(),
+        cluster_summary=clusteringExample.get_cluster_summary(),
+        sample_records=clusteringExample.get_sample_records(),
+        silhouette=clusteringExample.get_silhouette_score(),
+        chart=clusteringExample.generate_cluster_chart(),
+        interpretation=clusteringExample.get_cluster_interpretation(),
     )
 
 
