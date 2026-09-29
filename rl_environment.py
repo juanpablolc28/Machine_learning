@@ -31,17 +31,18 @@ WALL = "#"
 DANGER = "D"
 
 GRID_TEMPLATE = [
-    "Ao##oooD##",
-    "oD#o#oo#oo",
-    "DooD#Doooo",
-    "DDooooooDo",
-    "oo#ooooo##",
-    "ooo#o#oooo",
-    "Dooo#oo#oo",
-    "ooooooo#oo",
-    "o#oDooo#oo",
-    "o#oo#ooooT",
+    "Aooo#ooooo",
+    "o#ooooDDoo",
+    "oo#o#oDDoo",
+    "oooo#oDooo",
+    "##o####o##",
+    "oooo#ooDoo",
+    "o#oo#ooDDo",
+    "oooo#o#oDo",
+    "ooooooo#Do",
+    "oooo#ooooT",
 ]
+
 
 ACTIONS = ["Up", "Down", "Left", "Right"]
 ACTION_DELTAS = {
