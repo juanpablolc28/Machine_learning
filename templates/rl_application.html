@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}Reinforcement Learning Application{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    h2 { color: #7fb08f; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 750px; margin: 0 auto 40px auto; }
+    .section { max-width: 950px; margin: 0 auto 40px auto; background-color: #163321; border-radius: 14px; padding: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .stat-card { background-color: #1a3d2a; border-radius: 10px; padding: 16px; text-align: center; }
+    .stat-value { font-size: 22px; font-weight: bold; color: #e0a872; }
+    table.compare { width: 100%; border-collapse: collapse; }
+    table.compare th, table.compare td { border: 1px solid #2D9B6F; padding: 8px 10px; text-align: center; color: #f4f4f4; font-size: 13.5px; }
+    table.compare th { background-color: #1a3d2a; color: #e0a872; }
+    .table-scroll { max-height: 340px; overflow-y: auto; overflow-x: auto; border: 1px solid #2a4d38; border-radius: 8px; }
+    .table-scroll table { margin-top: 0; }
+    .table-scroll thead th { position: sticky; top: 0; }
+
+    .grid-wrap { overflow-x: auto; display: flex; justify-content: center; }
+    table.grid { border-collapse: collapse; }
+    table.grid td {
+        width: 36px; height: 36px; min-width: 36px;
+        text-align: center; vertical-align: middle;
+        font-weight: bold; font-size: 13px; color: #f4f4f4;
+        border: 1px solid #0d2818;
+    }
+    .cell-o { background-color: #234a33; }
+    .cell-wall { background-color: #0a140e; color: #555; }
+    .cell-danger { background-color: #7a2d2d; color: #ffd9d9; }
+    .cell-start { background-color: #2D6FA0; color: #fff; }
+    .cell-target { background-color: #D4A574; color: #10241a; }
+    .cell-path { box-shadow: inset 0 0 0 3px #ffe08a; }
+
+    .legend-item { display: inline-flex; align-items: center; gap: 6px; margin-right: 18px; font-size: 13.5px; color: #e8e8e8; }
+    .legend-swatch { width: 18px; height: 18px; border-radius: 4px; display: inline-block; }
+
+    .btn-train { background-color: #2D9B6F; border: none; color: white; padding: 12px 28px; border-radius: 8px; font-weight: bold; font-size: 16px; }
+    .btn-train:hover { background-color: #24815b; color: white; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">Reinforcement Learning: Application</h1>
+    <p class="intro">A Q-Learning agent trained with scikit-learn's SGDRegressor, learning to navigate a 10&times;10 maze from start (A) to target (T) while avoiding walls (#) and minimizing time spent in danger zones (D).</p>
+
+    <div class="section">
+        <h2>1. Environment (10&times;10 Grid)</h2>
+        <div class="grid-wrap">
+            <table class="grid">
+                {% for row in grid_rows %}
+                <tr>
+                    {% for cell in row %}
+                        {% set css = "cell-o" %}
+                        {% if cell.symbol == "#" %}{% set css = "cell-wall" %}
+                        {% elif cell.symbol == "D" %}{% set css = "cell-danger" %}
+                        {% endif %}
+                        {% if cell.is_start %}{% set css = "cell-start" %}{% endif %}
+                        {% if cell.is_target %}{% set css = "cell-target" %}{% endif %}
+                        <td class="{{ css }}{% if cell.on_path %} cell-path{% endif %}">
+                            {% if cell.is_start %}A{% elif cell.is_target %}T{% else %}{{ cell.symbol }}{% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="mt-3 text-center">
+            <span class="legend-item"><span class="legend-swatch cell-start"></span>A &mdash; Start</span>
+            <span class="legend-item"><span class="legend-swatch cell-target"></span>T &mdash; Target</span>
+            <span class="legend-item"><span class="legend-swatch cell-o"></span>o &mdash; Open path</span>
+            <span class="legend-item"><span class="legend-swatch cell-wall"></span># &mdash; Wall</span>
+            <span class="legend-item"><span class="legend-swatch cell-danger"></span>D &mdash; Danger zone</span>
+            {% if trained %}<span class="legend-item"><span class="legend-swatch" style="background:#234a33; box-shadow: inset 0 0 0 3px #ffe08a;"></span>Highlighted &mdash; learned path</span>{% endif %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Reward System</h2>
+        <table class="compare">
+            <tr><th>Situation</th><th>Reward</th></tr>
+            <tr><td>Moving to a valid normal position</td><td>{{ rewards.normal }}</td></tr>
+            <tr><td>Attempting an invalid movement (outside the grid)</td><td>{{ rewards.invalid }}</td></tr>
+            <tr><td>Hitting a wall (#)</td><td>{{ rewards.wall }}</td></tr>
+            <tr><td>Entering a Danger Zone (D)</td><td>{{ rewards.danger }}</td></tr>
+            <tr><td>Reaching the goal (T)</td><td>+{{ rewards.goal }}</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>3. Training Configuration</h2>
+        <table class="compare">
+            <tr><th>Parameter</th><th>Value</th></tr>
+            <tr><td>Initial epsilon (&epsilon;)</td><td>{{ hyperparams.epsilon_start }}</td></tr>
+            <tr><td>Minimum epsilon</td><td>{{ hyperparams.epsilon_min }}</td></tr>
+            <tr><td>Epsilon decay</td><td>{{ hyperparams.epsilon_decay }}</td></tr>
+            <tr><td>Discount factor (&gamma;)</td><td>{{ hyperparams.gamma }}</td></tr>
+            <tr><td>Training episodes</td><td>{{ hyperparams.episodes }}</td></tr>
+            <tr><td>Max steps per episode</td><td>{{ hyperparams.max_steps }}</td></tr>
+        </table>
+    </div>
+
+    <div class="section text-center">
+        <h2>4. Train the Agent</h2>
+        <p>Training runs entirely on the server (Q-Learning with an SGDRegressor per action) and is only triggered when you click the button below &mdash; it does not run automatically when the page loads.</p>
+        <form method="POST">
+            <button type="submit" class="btn-train">Train Agent</button>
+        </form>
+    </div>
+
+    {% if trained %}
+    <div class="section">
+        <h2>5. Training Results</h2>
+        <div class="row g-3">
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.total_episodes }}</div>Total Episodes</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.successful_episodes }}</div>Successful Episodes</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.success_rate }}%</div>Success Rate</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.average_reward }}</div>Average Reward</div></div>
+        </div>
+        <div class="row g-3 mt-1">
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ summary.final_epsilon }}</div>Final Epsilon</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ evaluation.steps }}</div>Steps (Final Evaluation)</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ evaluation.total_reward }}</div>Reward (Final Evaluation)</div></div>
+            <div class="col-md-3 col-6"><div class="stat-card"><div class="stat-value">{{ "Yes" if evaluation.goal_reached else "No" }}</div>Goal Reached</div></div>
+        </div>
+        {% if evaluation.looped %}
+        <div class="alert mt-3" style="background-color:#4a2d1a; border-left:4px solid #D4A574; color:#f4e0c8;">
+            The greedy evaluation was stopped early because the agent started repeating the same (state, action) pair &mdash; this usually means the policy has not fully converged for that region of the maze yet.
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2>6. Learned Path</h2>
+        <p>The path highlighted in the grid above (Section 1, gold border) shows the route the trained agent follows when acting greedily (no exploration).</p>
+    </div>
+
+    <div class="section">
+        <h2>7. Step-by-Step Evaluation</h2>
+        <p>Greedy policy execution (&epsilon; = 0), one row per step, generated by actually running the trained model.</p>
+        <div class="table-scroll">
+            <table class="compare">
+                <thead>
+                    <tr>
+                        <th>Step</th><th>State</th><th>Action</th><th>Next State</th><th>Cell Type</th><th>Reward</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in evaluation.steps_log %}
+                    <tr>
+                        <td>{{ row.step }}</td>
+                        <td>{{ row.state }}</td>
+                        <td>{{ row.action }}</td>
+                        <td>{{ row.next_state }}</td>
+                        <td>{{ row.cell_type }}</td>
+                        <td>{{ row.reward }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>8. Q-Values</h2>
+        <p>Learned action-value Q(s, a) for every open cell, as predicted by the trained model.</p>
+        <div class="table-scroll">
+            <table class="compare">
+                <thead>
+                    <tr>
+                        <th>State</th><th>Cell Type</th><th>Up</th><th>Down</th><th>Left</th><th>Right</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in q_table %}
+                    <tr>
+                        <td>{{ row.state }}</td>
+                        <td>{{ row.cell_type }}</td>
+                        <td>{{ row.up }}</td>
+                        <td>{{ row.down }}</td>
+                        <td>{{ row.left }}</td>
+                        <td>{{ row.right }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

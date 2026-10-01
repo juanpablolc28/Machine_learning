@@ -5,8 +5,15 @@ import LDAModel
 import clusteringExample
 import os
 import kmeans_manual
+import rl_environment
+import rl_agent
 
 app = Flask(__name__)
+
+_rl_env = rl_environment.GridEnvironment()
+_rl_agent = None
+_rl_history = None
+_rl_evaluation = None
 
 @app.route("/")
 def template():
@@ -206,6 +213,50 @@ def clustering_application():
         silhouette=clusteringExample.get_silhouette_score(),
         chart=clusteringExample.generate_cluster_chart(),
         interpretation=clusteringExample.get_cluster_interpretation(),
+    )
+
+
+@app.route("/rl-concepts")
+def rl_concepts():
+    return render_template("rl_concepts.html")
+
+
+@app.route("/rl-application", methods=["GET", "POST"])
+def rl_application():
+    global _rl_agent, _rl_history, _rl_evaluation
+
+    if request.method == "POST":
+        _rl_agent, _rl_history = rl_agent.train(_rl_env)
+        _rl_evaluation = rl_agent.evaluate(_rl_env, _rl_agent)
+
+    highlight = set(_rl_evaluation["path"]) if _rl_evaluation else None
+    grid_rows = _rl_env.render_rows(highlight=highlight)
+
+    summary = rl_agent.training_summary(_rl_history) if _rl_history else None
+    q_table = rl_agent.get_q_table(_rl_env, _rl_agent) if _rl_agent else None
+
+    return render_template(
+        "rl_application.html",
+        grid_rows=grid_rows,
+        trained=_rl_agent is not None,
+        summary=summary,
+        evaluation=_rl_evaluation,
+        q_table=q_table,
+        rewards={
+            "normal": rl_environment.REWARD_NORMAL_MOVE,
+            "invalid": rl_environment.REWARD_INVALID_MOVE,
+            "wall": rl_environment.REWARD_WALL_HIT,
+            "danger": rl_environment.REWARD_DANGER_ZONE,
+            "goal": rl_environment.REWARD_GOAL,
+        },
+        hyperparams={
+            "epsilon_start": rl_agent.EPSILON_START,
+            "epsilon_min": rl_agent.EPSILON_MIN,
+            "epsilon_decay": rl_agent.EPSILON_DECAY,
+            "gamma": rl_agent.GAMMA,
+            "episodes": rl_agent.N_EPISODES,
+            "max_steps": rl_agent.MAX_STEPS_PER_EPISODE,
+        },
     )
 
 

@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% block title %}Reinforcement Learning Concepts{% endblock %}
+{% block content %}
+<style>
+    h1 { color: #e0a872; text-align: center; }
+    .intro { text-align: center; color: #b8d4c2; max-width: 750px; margin: 0 auto 40px auto; }
+    .concept-card { background-color: #163321; border-radius: 14px; padding: 22px; height: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .concept-title { color: #7fb08f; font-weight: bold; font-size: 17px; margin-bottom: 8px; }
+    .concept-text { font-size: 14.5px; line-height: 1.5; color: #e8e8e8; }
+    .icon { font-size: 22px; margin-right: 8px; }
+    .section-title { color: #e0a872; margin: 40px 0 18px 0; }
+    table.actions th, table.actions td { border: 1px solid #2D9B6F; padding: 10px 14px; text-align: center; color: #f4f4f4; }
+    table.actions th { background-color: #1a3d2a; color: #e0a872; }
+    .accordion-button { background-color: #163321 !important; color: #f4f4f4 !important; }
+    .accordion-button:not(.collapsed) { background-color: #1a3d2a !important; color: #e0a872 !important; box-shadow: none !important; }
+    .accordion-body { background-color: #10241a; color: #e8e8e8; font-size: 14.5px; }
+    .accordion-item { border-color: #2a4d38 !important; }
+    .diagram-flow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin: 20px 0; }
+    .diagram-box { background-color: #1a3d2a; border: 1px solid #2D9B6F; border-radius: 10px; padding: 12px 16px; color: #f4f4f4; font-size: 13.5px; text-align: center; min-width: 120px; }
+    .diagram-arrow { color: #7fb08f; font-size: 20px; }
+</style>
+
+<div class="container my-5">
+    <h1 class="mb-3">Reinforcement Learning: Concepts</h1>
+    <p class="intro">Theoretical foundation of Reinforcement Learning, explained using this project's own environment: a virtual agent navigating a 10&times;10 maze to reach a target while avoiding walls and danger zones.</p>
+
+    <div class="alert" style="background-color:#1a3d2a; border-left:4px solid #2D9B6F; color:#e8e8e8;">
+        <strong>What is Reinforcement Learning?</strong> It is a type of machine learning in which an <strong>agent</strong> learns to make decisions by interacting with an <strong>environment</strong>: it takes actions, observes what happens, and receives rewards or penalties. Over many attempts, it learns a <strong>policy</strong> &mdash; a strategy for choosing actions &mdash; that maximizes the total reward it can expect to collect, without ever being told the correct move in advance.
+    </div>
+
+    <h2 class="section-title">Core Building Blocks</h2>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#129302;</span>Agent</div>
+                <div class="concept-text">The decision-maker. In this project, the agent is the virtual robot moving through the maze, one cell at a time.</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#128506;&#65039;</span>Environment</div>
+                <div class="concept-text">Everything the agent interacts with. Here, it is the 10&times;10 grid, together with its walls, danger zones, and movement rules.</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#128205;</span>State</div>
+                <div class="concept-text">A snapshot of the situation the agent is in. In this maze, the state is simply the agent's current (row, column) position.</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#127918;</span>Action</div>
+                <div class="concept-text">A choice the agent can make in a given state. In this environment there are exactly four possible actions.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive mt-4">
+        <table class="actions" style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr><th>Action</th><th>Effect on position (row, col)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Up</td><td>row &minus; 1</td></tr>
+                <tr><td>Down</td><td>row + 1</td></tr>
+                <tr><td>Left</td><td>col &minus; 1</td></tr>
+                <tr><td>Right</td><td>col + 1</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="section-title">Feedback Signals</h2>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#127942;</span>Reward</div>
+                <div class="concept-text">A numeric signal telling the agent how good an outcome was. Reaching the target gives a large positive reward.</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#9888;&#65039;</span>Penalty</div>
+                <div class="concept-text">A negative reward that discourages an action. Hitting a wall, leaving the grid, or entering a danger zone are all penalized.</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#128220;</span>Policy</div>
+                <div class="concept-text">The strategy the agent follows to pick actions from each state. Training gradually improves this policy.</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="concept-card">
+                <div class="concept-title"><span class="icon">&#128099;</span>Step</div>
+                <div class="concept-text">One state &rarr; action &rarr; reward &rarr; next state transition. An episode is made of many steps.</div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Learning Process</h2>
+    <div class="accordion" id="rlAccordion">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a1">Episode</button>
+            </h2>
+            <div id="a1" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">One full attempt at the maze: from the agent's start cell until it either reaches the target or runs out of allowed steps.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">Experience</button>
+            </h2>
+            <div id="a2" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">A single recorded transition (state, action, reward, next state) that the agent uses to update what it knows.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">Exploration</button>
+            </h2>
+            <div id="a3" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">Trying random actions to discover parts of the maze the agent hasn't learned about yet, even if they seem suboptimal right now.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4">Exploitation</button>
+            </h2>
+            <div id="a4" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">Choosing the action the agent currently believes is best, based on what it has learned so far.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a5">Epsilon-Greedy Strategy</button>
+            </h2>
+            <div id="a5" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">With probability &epsilon; (epsilon) the agent explores (random action); otherwise it exploits (best known action). &epsilon; starts high and decays over training, so the agent explores a lot early on and relies more on its learned policy later.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a6">Immediate Reward</button>
+            </h2>
+            <div id="a6" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">The reward received right after a single action &mdash; for example, the &minus;1 penalty for one normal move.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a7">Return</button>
+            </h2>
+            <div id="a7" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">The total accumulated reward over an entire episode &mdash; the sum of every immediate reward from start to finish (or termination).</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a8">Discount Factor (&gamma;)</button>
+            </h2>
+            <div id="a8" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">A value between 0 and 1 that controls how much the agent values future rewards versus immediate ones. A &gamma; close to 1 makes the agent plan further ahead toward the target instead of only avoiding the very next penalty.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a9">State Value V(s)</button>
+            </h2>
+            <div id="a9" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">The expected return the agent can obtain starting from state s and then following its policy &mdash; how "good" a given maze cell is overall.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a10">Action Value Q(s,a)</button>
+            </h2>
+            <div id="a10" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">The expected return of taking a specific action a in state s, and then following the policy afterward. This is exactly what the application page displays as the "Q-values" table for each maze cell.</div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a11">Q-Learning</button>
+            </h2>
+            <div id="a11" class="accordion-collapse collapse" data-bs-parent="#rlAccordion">
+                <div class="accordion-body">The algorithm used to learn Q(s,a) from experience, without needing a model of the environment. In this project it is implemented with a scikit-learn <code>SGDRegressor</code> per action, updated incrementally with <code>partial_fit()</code> every time the agent takes a step, instead of a plain lookup table.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <h2 class="section-title">The Agent&ndash;Environment Loop</h2>
+    <div class="diagram-flow">
+        <div class="diagram-box">Environment<br><small>(10&times;10 grid)</small></div>
+        <div class="diagram-arrow">&rarr;</div>
+        <div class="diagram-box">Current State<br><small>(row, col)</small></div>
+        <div class="diagram-arrow">&rarr;</div>
+        <div class="diagram-box">Epsilon-Greedy<br>Action Selection</div>
+        <div class="diagram-arrow">&rarr;</div>
+        <div class="diagram-box">Environment<br>Interaction (step)</div>
+        <div class="diagram-arrow">&rarr;</div>
+        <div class="diagram-box">Reward +<br>Next State</div>
+        <div class="diagram-arrow">&rarr;</div>
+        <div class="diagram-box">Q-Value Update<br>(partial_fit)</div>
+        <div class="diagram-arrow">&rarr;</div>
+        <div class="diagram-box">Goal reached, or<br>next step</div>
+    </div>
+
+    <div class="alert mt-4" style="background-color:#1a3d2a; border-left:4px solid #D4A574; color:#e8e8e8;">
+        See this entire cycle running on real data on the <a href="/rl-application" style="color:#e0a872;">Application</a> page: train the agent, inspect the learned path, the step-by-step evaluation, and the final Q-values.
+    </div>
+</div>
+{% endblock %}
