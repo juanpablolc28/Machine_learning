@@ -1,39 +1,19 @@
-"""
-Q-Learning agent for the grid environment, following the class reference
-approach: Q(s, a) is approximated with one scikit-learn SGDRegressor per
-action, trained incrementally with partial_fit() on observed transitions
-(instead of a plain lookup table).
-
-TODO (Juan Pablo): the hyperparameters below are a reasonable starting
-point, not a tuned result. Please retrain with a few different values,
-compare the success rate / average reward you get from `train()`, pick the
-configuration you consider best, and explain that choice (and what you
-tried) in the report.
-"""
-
 import random
 import numpy as np
 from sklearn.linear_model import SGDRegressor
 
 from rl_environment import GridEnvironment, ACTIONS
 
-# Hyperparameters -------------------------------------------------------
 EPSILON_START = 1.0
 EPSILON_MIN = 0.05
 EPSILON_DECAY = 0.995
 GAMMA = 0.95
-N_EPISODES = 800
-MAX_STEPS_PER_EPISODE = 150
+N_EPISODES = 1000
+MAX_STEPS_PER_EPISODE = 200
 MAX_STEPS_EVALUATION = 100
 
 
 def featurize(env, state):
-    """One-hot encode (row, col) over all cells in the grid.
-
-    This lets a linear model (SGDRegressor) learn an independent value per
-    state per action, similar in spirit to a tabular Q-table, while still
-    using the predict()/partial_fit() workflow required by the assignment.
-    """
     r, c = state
     vec = np.zeros(env.rows * env.cols, dtype=float)
     vec[r * env.cols + c] = 1.0
@@ -43,7 +23,17 @@ def featurize(env, state):
 class QLearningAgent:
     def __init__(self, env):
         self.env = env
-        self.regressors = {a: SGDRegressor(max_iter=1, learning_rate="constant", eta0=0.05) for a in ACTIONS}
+        self.regressors = {
+            a: SGDRegressor(
+                loss="squared_error",
+                penalty=None,
+                fit_intercept=False,
+                learning_rate="constant",
+                eta0=0.1,
+                random_state=42,
+            )
+            for a in ACTIONS
+        }
         self.fitted = {a: False for a in ACTIONS}
 
     def predict_q(self, state, action):
@@ -116,7 +106,6 @@ def train(env=None, episodes=N_EPISODES, max_steps=MAX_STEPS_PER_EPISODE,
 
 
 def evaluate(env, agent, max_steps=MAX_STEPS_EVALUATION):
-    """Run the greedy (epsilon = 0) policy once and log every step."""
     state = env.reset()
     steps_log = []
     total_reward = 0.0
@@ -158,7 +147,6 @@ def evaluate(env, agent, max_steps=MAX_STEPS_EVALUATION):
 
 
 def get_q_table(env, agent):
-    """Q-values for every non-wall cell, for display in the UI/report."""
     rows = []
     for r in range(env.rows):
         for c in range(env.cols):
