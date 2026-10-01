@@ -56,11 +56,11 @@ ACTION_DELTAS = {
 # TODO (Johan Sebastian / group): these values are a reasonable starting
 # point but can be retuned; whatever you use, explain the choice in the
 # report (how each value shapes the agent's behavior).
-REWARD_NORMAL_MOVE = -1
+REWARD_NORMAL_MOVE = -0.5
 REWARD_INVALID_MOVE = -3     # tried to move outside the 10x10 grid
 REWARD_WALL_HIT = -6         # tried to move into a '#' cell
 REWARD_DANGER_ZONE = -20     # moved into a 'D' cell
-REWARD_GOAL = 100            # reached the target
+REWARD_GOAL = 500            # reached the target
 
 
 class GridEnvironment:
